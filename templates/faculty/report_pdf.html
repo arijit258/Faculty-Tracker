@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4f46e5;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: #4f46e5;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            font-size: 16px;
+            color: #4f46e5;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-box h3 {
+            font-size: 24px;
+            color: #4f46e5;
+        }
+        
+        .stat-box p {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            page-break-inside: auto;
+        }
+        
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+        
+        thead {
+            display: table-header-group;
+        }
+        
+        tfoot {
+            display: table-footer-group;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        
+        tr:hover {
+            background: #f9fafb;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .date-range {
+            background: #fef3c7;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            color: #92400e;
+        }
+        
+        .performance-table {
+            margin-top: 20px;
+        }
+        
+        .performance-table th {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .performance-table tr:nth-child(even) {
+            background: #f3f4f6;
+        }
+        
+        .total-row {
+            font-weight: bold;
+            background: #e5e7eb !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Faculty Management Report</h1>
+        <p>Generated on: {{ generated_date }}</p>
+    </div>
+    
+    {% if start_date or end_date %}
+    <div class="date-range">
+        <strong>Report Period:</strong> 
+        {% if start_date %}From {{ start_date }}{% endif %}
+        {% if start_date and end_date %} - {% endif %}
+        {% if end_date %}To {{ end_date }}{% endif %}
+        {% if not start_date and not end_date %}All Time{% endif %}
+    </div>
+    {% endif %}
+    
+    <div class="section">
+        <h2>Overview Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h3>{{ teachers|length }}</h3>
+                <p>Total Teachers</p>
+            </div>
+            <div class="stat-box">
+                <h3>{{ departments|length }}</h3>
+                <p>Departments</p>
+            </div>
+            <div class="stat-box">
+                <h3>{{ subjects|length }}</h3>
+                <p>Subjects</p>
+            </div>
+            <div class="stat-box">
+                <h3>{{ sessions|length }}</h3>
+                <p>Total Classes</p>
+            </div>
+        </div>
+    </div>
+    
+    {% if teacher_performance %}
+    <div class="section">
+        <h2>Teacher Performance Summary</h2>
+        <p style="font-size: 11px; color: #666; margin-bottom: 10px;">Classes conducted and total duration per teacher</p>
+        <table class="performance-table">
+            <thead>
+                <tr>
+                    <th>Teacher</th>
+                    <th>Employee ID</th>
+                    <th>Department</th>
+                    <th>Classes Conducted</th>
+                    <th>Total Duration (hrs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for perf in teacher_performance %}
+                <tr>
+                    <td>{{ perf.teacher.first_name }} {{ perf.teacher.last_name }}</td>
+                    <td>{{ perf.teacher.employee_id }}</td>
+                    <td>{{ perf.teacher.department.name|default:"Not Assigned" }}</td>
+                    <td>{{ perf.sessions_conducted }}</td>
+                    <td>{{ perf.total_duration|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3">TOTAL</td>
+                    <td>{{ teacher_performance|length }} Active Teachers</td>
+                    <td>{{ total_duration_all|floatformat:2 }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    <div class="two-column">
+        <div class="section">
+            <h2>Teachers by Department</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Teachers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept in departments %}
+                    <tr>
+                        <td>{{ dept.name }}</td>
+                        <td>{{ dept.teachers.count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">No departments found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>Programs Overview</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Program</th>
+                        <th>Code</th>
+                        <th>Subjects</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prog in programs %}
+                    <tr>
+                        <td>{{ prog.name }}</td>
+                        <td>{{ prog.code }}</td>
+                        <td>{{ prog.subject_set.count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No programs found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Teacher List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Qualification</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
+                    <td>{{ teacher.email }}</td>
+                    <td>{{ teacher.department.name|default:"Not Assigned" }}</td>
+                    <td>{{ teacher.qualification|default:"-" }}</td>
+                    <td>
+                        <span class="status-badge {% if teacher.status == 'active' %}status-active{% else %}status-inactive{% endif %}">
+                            {{ teacher.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No teachers found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Recent Sessions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Teacher</th>
+                    <th>Subject</th>
+                    <th>Program</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions|slice:":30" %}
+                <tr>
+                    <td>{{ session.teacher.first_name }} {{ session.teacher.last_name }}</td>
+                    <td>{{ session.subject.name }}</td>
+                    <td>{{ session.subject.program.name }}</td>
+                    <td>{{ session.get_day_of_week_display }}</td>
+                    <td>{{ session.start_time }} - {{ session.end_time }}</td>
+                    <td>
+                        <span class="status-badge status-active">{{ session.get_status_display }}</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No sessions found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="footer">
+        <p>This report was automatically generated by Faculty Tracker System</p>
+        <p>Generated on: {{ generated_date }}</p>
+    </div>
+</body>
+</html>

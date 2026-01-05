@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if object %}Edit Department{% else %}Add New Department{% endif %} - Faculty Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% if object %}Edit Department{% else %}Add New Department{% endif %}</h1>
+    <p>{% if object %}Update department information{% else %}Enter department details{% endif %}</p>
+</div>
+
+<div class="content-card animate-fadeInUp">
+    <div class="content-card-header">
+        <h5><i class="fas fa-building me-2 text-primary"></i>Department Information</h5>
+    </div>
+    <div class="content-card-body">
+        <form method="POST" id="departmentForm">
+            {% csrf_token %}
+
+            <div class="row g-4">
+                <div class="col-md-12">
+                    {{ form.name|as_crispy_field }}
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Assign Teachers</label>
+
+                    <!-- Search and Add Section -->
+                    <div class="teacher-search-section">
+                        <div class="input-group mb-3">
+                            <input type="text" id="teacherSearchInput" class="form-control" placeholder="Search teachers by name or email..." autocomplete="off">
+                            <button type="button" id="searchTeacherBtn" class="btn btn-outline-primary">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+
+                        <!-- Search Results Dropdown -->
+                        <div id="teacherSearchResults" class="teacher-search-results" style="display: none;">
+                            <div class="list-group list-group-flush">
+                                <!-- Results will be populated via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Teachers Display -->
+                    <div class="selected-teachers-container">
+                        <label class="form-label">Selected Teachers</label>
+                        <div id="selectedTeachersList" class="selected-teachers-list">
+                            <p class="text-muted small">No teachers selected yet. Search and add teachers above.</p>
+                        </div>
+                    </div>
+
+                    <!-- Hidden input to store selected teacher IDs -->
+                    {{ form.teachers }}
+                </div>
+                <div class="col-md-12">
+                    {{ form.description|as_crispy_field }}
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <a href="{% url 'faculty:department_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>{% if object %}Update{% else %}Save{% endif %} Department
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .teacher-search-section {
+        position: relative;
+    }
+
+    .teacher-search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        max-height: 300px;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        margin-top: 5px;
+    }
+
+    .teacher-search-results .list-group-item {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .teacher-search-results .list-group-item:hover {
+        background-color: #f3f4f6;
+    }
+
+    .selected-teachers-list {
+        min-height: 60px;
+        padding: 15px;
+        background: #f9fafb;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .teacher-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: linear-gradient(135deg, var(--primary-color), #818cf8);
+        color: white;
+        border-radius: 20px;
+        margin: 5px;
+        font-size: 14px;
+    }
+
+    .teacher-tag .remove-btn {
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+
+    .teacher-tag .remove-btn:hover {
+        opacity: 1;
+    }
+
+    /* Hide the original select element but keep it for form validation */
+    #id_teachers {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('teacherSearchInput');
+        const searchResults = document.getElementById('teacherSearchResults');
+        const selectedList = document.getElementById('selectedTeachersList');
+        const originalSelect = document.getElementById('id_teachers');
+        const searchBtn = document.getElementById('searchTeacherBtn');
+
+        // Store all teachers data
+        let allTeachers = [];
+        let selectedTeacherIds = new Set();
+
+        // Load all teachers on page load
+        const getTeachersUrl = "{% url 'faculty:get_all_teachers' %}";
+        fetch(getTeachersUrl)
+            .then(response => response.json())
+            .then(data => {
+                allTeachers = data.teachers || [];
+                // Initialize with already selected teachers (for edit mode)
+                initializeSelectedTeachers();
+            })
+            .catch(function() {
+                // Fallback: use hardcoded data
+                allTeachers = [
+                    {% for teacher in form.teachers.queryset %}
+                    {id: {{ teacher.id }}, name: "{{ teacher.full_name }}", email: "{{ teacher.email }}", specialization: "{{ teacher.specialization }}"},
+                    {% endfor %}
+                ];
+                initializeSelectedTeachers();
+            });
+
+        // Initialize selected teachers from the original select element
+        function initializeSelectedTeachers() {
+            // For edit mode, check if there are already selected options
+            const selectedOptions = originalSelect.querySelectorAll('option:checked');
+            selectedOptions.forEach(option => {
+                selectedTeacherIds.add(parseInt(option.value));
+            });
+
+            if (selectedTeacherIds.size > 0) {
+                updateSelectedTeachersDisplay();
+            }
+        }
+
+        // Search function
+        function searchTeachers(query) {
+            if (!query.trim()) {
+                searchResults.style.display = 'none';
+                return [];
+            }
+
+            const results = allTeachers.filter(teacher =>
+                teacher.name.toLowerCase().includes(query.toLowerCase()) ||
+                teacher.email.toLowerCase().includes(query.toLowerCase()) ||
+                (teacher.specialization && teacher.specialization.toLowerCase().includes(query.toLowerCase()))
+            ).filter(teacher => !selectedTeacherIds.has(teacher.id));
+
+            return results;
+        }
+
+        // Display search results
+        function displayResults(results) {
+            const resultsContainer = searchResults.querySelector('.list-group');
+            resultsContainer.innerHTML = '';
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="list-group-item text-muted">No teachers found matching your search.</div>';
+            } else {
+                results.forEach(teacher => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item';
+                    item.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${teacher.name}</strong>
+                                <small class="d-block text-muted">${teacher.email}</small>
+                                ${teacher.specialization ? `<small class="d-block text-muted">${teacher.specialization}</small>` : ''}
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary add-teacher-btn" data-id="${teacher.id}" data-name="${teacher.name}">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(item);
+                });
+            }
+
+            searchResults.style.display = 'block';
+        }
+
+        // Add teacher to selected list
+        function addTeacher(teacherId, teacherName) {
+            if (selectedTeacherIds.has(parseInt(teacherId))) {
+                return;
+            }
+
+            selectedTeacherIds.add(parseInt(teacherId));
+            updateSelectedTeachersDisplay();
+            updateOriginalSelect();
+        }
+
+        // Remove teacher from selected list
+        function removeTeacher(teacherId) {
+            selectedTeacherIds.delete(parseInt(teacherId));
+            updateSelectedTeachersDisplay();
+            updateOriginalSelect();
+        }
+
+        // Update display of selected teachers
+        function updateSelectedTeachersDisplay() {
+            if (selectedTeacherIds.size === 0) {
+                selectedList.innerHTML = '<p class="text-muted small">No teachers selected yet. Search and add teachers above.</p>';
+                return;
+            }
+
+            const selectedTeachers = allTeachers.filter(t => selectedTeacherIds.has(t.id));
+            selectedList.innerHTML = '';
+
+            selectedTeachers.forEach(teacher => {
+                const tag = document.createElement('div');
+                tag.className = 'teacher-tag';
+                tag.innerHTML = `
+                    <span>${teacher.name}</span>
+                    <span class="remove-btn" onclick="removeTeacher(${teacher.id})">
+                        <i class="fas fa-times"></i>
+                    </span>
+                `;
+                selectedList.appendChild(tag);
+            });
+        }
+
+        // Update original select element to reflect selections
+        function updateOriginalSelect() {
+            // Clear all options first
+            originalSelect.querySelectorAll('option').forEach(opt => {
+                opt.selected = false;
+            });
+
+            // Select the chosen options
+            selectedTeacherIds.forEach(id => {
+                const option = originalSelect.querySelector(`option[value="${id}"]`);
+                if (option) {
+                    option.selected = true;
+                }
+            });
+        }
+
+        // Event listeners
+        searchBtn.addEventListener('click', function() {
+            const query = searchInput.value;
+            const results = searchTeachers(query);
+            displayResults(results);
+        });
+
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                const query = searchInput.value;
+                const results = searchTeachers(query);
+                displayResults(results);
+            } else if (searchInput.value.length >= 2) {
+                const results = searchTeachers(searchInput.value);
+                displayResults(results);
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Handle add button clicks in results
+        searchResults.addEventListener('click', function(e) {
+            if (e.target.closest('.add-teacher-btn')) {
+                const btn = e.target.closest('.add-teacher-btn');
+                addTeacher(btn.dataset.id, btn.dataset.name);
+                searchResults.style.display = 'none';
+                searchInput.value = '';
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.teacher-search-section')) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Form submission - ensure selections are updated
+        const form = document.getElementById('departmentForm');
+        form.addEventListener('submit', function(e) {
+            // Force update the original select before submission
+            updateOriginalSelect();
+            // Allow the form to continue submission
+        });
+
+        // Make removeTeacher available globally
+        window.removeTeacher = removeTeacher;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ teacher.full_name }} - Faculty Tracker{% endblock %}
+
+{% block content %}
+<!-- Date Range Filter -->
+<div class="content-card mb-4">
+    <div class="content-card-body">
+        <form method="GET" action="{% url 'faculty:teacher_export' teacher.pk %}" target="_blank" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="start_date" class="form-label fw-bold">Start Date</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date|default:'' }}">
+            </div>
+            <div class="col-md-4">
+                <label for="end_date" class="form-label fw-bold">End Date</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date|default:'' }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="fas fa-file-excel me-1"></i>Export
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a href="?" class="btn btn-outline-secondary w-100">
+                    <i class="fas fa-times me-1"></i>Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Page Header -->
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Teacher Profile</h1>
+        <p>View and manage teacher details</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'faculty:teacher_edit' teacher.pk %}" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Edit
+        </a>
+        <a href="{% url 'faculty:teacher_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+</div>
+
+<!-- Profile Card -->
+<div class="row g-4">
+    <!-- Profile Info -->
+    <div class="col-lg-4">
+        <div class="content-card animate-fadeInUp">
+            <div class="content-card-body text-center">
+                {% if teacher.photo %}
+                <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" 
+                     class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--primary-color);">
+                {% else %}
+                <div class="teacher-avatar mx-auto mb-3">
+                    {{ teacher.first_name|first }}{{ teacher.last_name|first }}
+                </div>
+                {% endif %}
+                
+                <h4 class="mb-1">{{ teacher.full_name }}</h4>
+                <p class="text-muted mb-2">{{ teacher.employee_id }}</p>
+                
+                {% if teacher.status == 'active' %}
+                <span class="badge bg-success mb-3">Active</span>
+                {% elif teacher.status == 'on_leave' %}
+                <span class="badge bg-warning mb-3">On Leave</span>
+                {% else %}
+                <span class="badge bg-secondary mb-3">Inactive</span>
+                {% endif %}
+                
+                <div class="d-flex justify-content-center gap-3 mb-3">
+                    <a href="mailto:{{ teacher.email }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="tel:{{ teacher.phone }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                </div>
+                
+                <hr>
+                
+                <div class="text-start">
+                    <div class="mb-2">
+                        <small class="text-muted">Email</small>
+                        <p class="mb-0">{{ teacher.email }}</p>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Phone</small>
+                        <p class="mb-0">{{ teacher.phone }}</p>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Department</small>
+                        <p class="mb-0">{{ teacher.department.name|default:"Not assigned" }}</p>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Hire Date</small>
+                        <p class="mb-0">{{ teacher.hire_date|default:"Not specified" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="content-card animate-fadeInUp" style="animation-delay: 0.1s;">
+            <div class="content-card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2 text-primary"></i>Statistics</h5>
+            </div>
+            <div class="content-card-body">
+                <div class="row text-center">
+                    <div class="col-6 border-end">
+                        <h3 class="text-primary mb-0">{{ total_sessions_count }}</h3>
+                        <small class="text-muted">Total Sessions</small>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="text-success mb-0">{{ total_hours }}</h3>
+                        <small class="text-muted">Hours Taught</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="mb-2 d-flex justify-content-between">
+                    <small class="text-muted">Qualification</small>
+                    <span>{{ teacher.qualification|default:"Not specified" }}</span>
+                </div>
+                <div class="mb-2 d-flex justify-content-between">
+                    <small class="text-muted">Specialization</small>
+                    <span>{{ teacher.specialization|default:"Not specified" }}</span>
+                </div>
+                <div class="mb-2 d-flex justify-content-between">
+                    <small class="text-muted">Experience</small>
+                    <span>{{ teacher.experience_years }} years</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <small class="text-muted">Hourly Rate</small>
+                    <span>${{ teacher.hourly_rate }}/hr</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sessions and Details -->
+    <div class="col-lg-8">
+        <!-- Schedule -->
+        <div class="content-card animate-fadeInUp" style="animation-delay: 0.2s;">
+            <div class="content-card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2 text-primary"></i>Class Schedule</h5>
+            </div>
+            <div class="content-card-body">
+                {% if sessions %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Time</th>
+                                <th>Subject</th>
+                                <th>Duration</th>
+                                <th>Room</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in sessions %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-light text-dark">{{ session.get_day_of_week_display }}</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">{{ session.start_time|time:"g:i A" }}</span>
+                                    <span class="text-muted">- {{ session.end_time|time:"g:i A" }}</span>
+                                </td>
+                                <td>{{ session.subject.name }}</td>
+                                <td>{{ session.duration }} hrs</td>
+                                <td>{{ session.room|default:"Not assigned" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state py-4">
+                    <i class="fas fa-calendar-times"></i>
+                    <h5>No Scheduled Classes</h5>
+                    <p>This teacher has no classes scheduled.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Recent Attendance -->
+        <div class="content-card animate-fadeInUp" style="animation-delay: 0.3s;">
+            <div class="content-card-header">
+                <h5 class="mb-0"><i class="fas fa-clipboard-check me-2 text-primary"></i>Recent Attendance</h5>
+            </div>
+            <div class="content-card-body">
+                {% if attendance_records %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in attendance_records %}
+                            <tr>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.session.subject.name }}</td>
+                                <td>
+                                    {% if record.status == 'present' %}
+                                    <span class="badge bg-success">Present</span>
+                                    {% elif record.status == 'absent' %}
+                                    <span class="badge bg-danger">Absent</span>
+                                    {% elif record.status == 'late' %}
+                                    <span class="badge bg-warning">Late</span>
+                                    {% else %}
+                                    <span class="badge bg-info">Excused</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ record.check_in_time|default:"-" }}</td>
+                                <td>{{ record.check_out_time|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state py-4">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h5>No Attendance Records</h5>
+                    <p>No attendance records found for this teacher.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Additional Info -->
+        <div class="content-card animate-fadeInUp" style="animation-delay: 0.4s;">
+            <div class="content-card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2 text-primary"></i>Additional Information</h5>
+            </div>
+            <div class="content-card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <small class="text-muted">Address</small>
+                            <p class="mb-0">{{ teacher.address|default:"Not provided" }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <small class="text-muted">Date of Birth</small>
+                            <p class="mb-0">{{ teacher.date_of_birth|default:"Not provided" }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <small class="text-muted">Emergency Contact Name</small>
+                            <p class="mb-0">{{ teacher.emergency_contact_name|default:"Not provided" }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <small class="text-muted">Emergency Contact Phone</small>
+                            <p class="mb-0">{{ teacher.emergency_contact_phone|default:"Not provided" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Base font size increase */
+    body {
+        font-size: 16px;
+    }
+    
+    .teacher-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color), #818cf8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 40px;
+        font-weight: 600;
+    }
+    
+    .content-card h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+    
+    .content-card h4 {
+        font-size: 1.35rem;
+        font-weight: 600;
+    }
+    
+    .content-card h5 {
+        font-size: 1.15rem;
+        font-weight: 600;
+    }
+    
+    .content-card h6 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    .content-card p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .content-card .small {
+        font-size: 0.9rem;
+    }
+    
+    .content-card td {
+        font-size: 1rem;
+        padding: 12px 15px;
+    }
+    
+    .content-card th {
+        font-size: 0.95rem;
+        padding: 12px 15px;
+    }
+    
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.4em 0.8em;
+    }
+    
+    .btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+    
+    .form-label {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    
+    .form-control {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .page-header p {
+        font-size: 1.1rem;
+    }
+    
+    .text-muted {
+        font-size: 0.95rem;
+    }
+    
+    .fw-bold {
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}

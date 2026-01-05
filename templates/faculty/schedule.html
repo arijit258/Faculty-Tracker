@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Schedule - Faculty Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Class Schedule</h1>
+        <p>Manage class sessions and timings</p>
+    </div>
+    <a href="{% url 'faculty:session_add' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add Session
+    </a>
+</div>
+
+<!-- Filters Card -->
+<div class="content-card animate-fadeInUp">
+    <div class="content-card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Teacher</label>
+                <select name="teacher" class="form-select" id="filter_teacher">
+                    <option value="">All Teachers</option>
+                    {% for teacher in teachers %}
+                    <option value="{{ teacher.pk }}" {% if request.GET.teacher == teacher.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ teacher.full_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Day</label>
+                <select name="day_of_week" class="form-select">
+                    <option value="">All Days</option>
+                    <option value="monday" {% if request.GET.day_of_week == 'monday' %}selected{% endif %}>Monday</option>
+                    <option value="tuesday" {% if request.GET.day_of_week == 'tuesday' %}selected{% endif %}>Tuesday</option>
+                    <option value="wednesday" {% if request.GET.day_of_week == 'wednesday' %}selected{% endif %}>Wednesday</option>
+                    <option value="thursday" {% if request.GET.day_of_week == 'thursday' %}selected{% endif %}>Thursday</option>
+                    <option value="friday" {% if request.GET.day_of_week == 'friday' %}selected{% endif %}>Friday</option>
+                    <option value="saturday" {% if request.GET.day_of_week == 'saturday' %}selected{% endif %}>Saturday</option>
+                    <option value="sunday" {% if request.GET.day_of_week == 'sunday' %}selected{% endif %}>Sunday</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Subject</label>
+                <select name="subject" class="form-select" id="filter_subject">
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.pk }}" {% if request.GET.subject == subject.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ subject.code }} - {{ subject.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1">
+                    <i class="fas fa-filter me-2"></i>Filter
+                </button>
+                <a href="{% url 'faculty:schedule' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-redo"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Schedule View -->
+<div class="content-card animate-fadeInUp" style="animation-delay: 0.1s;">
+    <div class="content-card-header">
+        <h5 class="mb-0"><i class="fas fa-calendar-week me-2 text-primary"></i>Sessions</h5>
+        <span class="badge bg-primary">{{ sessions|length }} Sessions</span>
+    </div>
+    <div class="content-card-body p-0">
+        {% if sessions %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Teacher</th>
+                        <th>Subject</th>
+                        <th>Duration</th>
+                        <th>Room</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                    <tr>
+                        <td>
+                            <span class="badge bg-light text-dark fw-normal">{{ session.get_day_of_week_display }}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-clock text-muted"></i>
+                                <div>
+                                    <div class="fw-bold">{{ session.start_time|time:"g:i A" }}</div>
+                                    <small class="text-muted">{{ session.end_time|time:"g:i A" }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">
+                                    {{ session.teacher.first_name|first }}{{ session.teacher.last_name|first }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold small">{{ session.teacher.full_name }}</div>
+                                    <small class="text-muted">{{ session.teacher.department.name|default:"" }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary">{{ session.subject.code }}</span>
+                            <span class="ms-1">{{ session.subject.name }}</span>
+                        </td>
+                        <td>
+                            <i class="far fa-clock me-1 text-muted"></i>
+                            {{ session.duration }} hrs
+                        </td>
+                        <td>
+                            <i class="fas fa-map-marker-alt me-1 text-muted"></i>
+                            {{ session.room|default:"Not assigned" }}
+                        </td>
+                        <td>
+                            {% if session.status == 'scheduled' %}
+                            <span class="badge bg-success">Scheduled</span>
+                            {% elif session.status == 'in_progress' %}
+                            <span class="badge bg-primary">In Progress</span>
+                            {% elif session.status == 'completed' %}
+                            <span class="badge bg-secondary">Completed</span>
+                            {% elif session.status == 'cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                            {% else %}
+                            <span class="badge bg-warning">{{ session.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{% url 'faculty:session_edit' session.pk %}" class="btn btn-outline-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ session.pk }}" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal{{ session.pk }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete Session</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this session?</p>
+                                    <ul class="mb-0 text-muted">
+                                        <li><strong>Teacher:</strong> {{ session.teacher.full_name }}</li>
+                                        <li><strong>Subject:</strong> {{ session.subject.name }}</li>
+                                        <li><strong>Time:</strong> {{ session.get_day_of_week_display }} {{ session.start_time|time:"g:i A" }} - {{ session.end_time|time:"g:i A" }}</li>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{% url 'faculty:session_delete' session.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="p-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-calendar-times"></i>
+            <h5>No Sessions Found</h5>
+            <p>{% if request.GET.search or request.GET.teacher or request.GET.day_of_week or request.GET.subject %}No sessions match your filters.{% else %}Get started by scheduling your first class.{% endif %}</p>
+            <a href="{% url 'faculty:session_add' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Session
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

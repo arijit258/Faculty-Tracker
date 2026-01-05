@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if object %}Edit Session{% else %}Add Session{% endif %} - Faculty Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h1>{{ title }}</h1>
+    <p>{% if object %}Update session details{% else %}Schedule a new class session{% endif %}</p>
+</div>
+
+<!-- Form Card -->
+<div class="content-card animate-fadeInUp">
+    <div class="content-card-header">
+        <h5><i class="fas fa-calendar-plus me-2 text-primary"></i>Session Details</h5>
+    </div>
+    <div class="content-card-body">
+        <form method="POST" id="sessionForm">
+            {% csrf_token %}
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    {{ form.teacher|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.subject|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.day_of_week|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.start_time|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.end_time|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.date|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.room|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.status|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.is_recurring|as_crispy_field }}
+                </div>
+                <div class="col-12">
+                    {{ form.notes|as_crispy_field }}
+                </div>
+            </div>
+            
+            <!-- Conflict Warning -->
+            <div id="conflictWarning" class="alert alert-warning mt-3 d-none">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="conflictMessage"></span>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <a href="{% url 'faculty:schedule' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-save me-2"></i>{% if object %}Update{% else %}Schedule{% endif %} Session
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const teacherSelect = document.getElementById('id_teacher');
+    const subjectSelect = document.getElementById('id_subject');
+    const daySelect = document.getElementById('id_day_of_week');
+    const startTimeInput = document.getElementById('id_start_time');
+    const endTimeInput = document.getElementById('id_end_time');
+    const conflictWarning = document.getElementById('conflictWarning');
+    const conflictMessage = document.getElementById('conflictMessage');
+    const form = document.getElementById('sessionForm');
+    
+    function checkConflicts() {
+        const teacherId = teacherSelect.value;
+        const day = daySelect.value;
+        const startTime = startTimeInput.value;
+        const endTime = endTimeInput.value;
+        
+        if (!teacherId || !day || !startTime || !endTime) {
+            conflictWarning.classList.add('d-none');
+            return;
+        }
+        
+        const url = `{% url 'faculty:check_conflicts' %}?teacher_id=${teacherId}&day_of_week=${day}&start_time=${startTime}&end_time=${endTime}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.has_conflict) {
+                    conflictWarning.classList.remove('d-none');
+                    conflictMessage.textContent = data.message;
+                    document.getElementById('submitBtn').disabled = true;
+                } else {
+                    conflictWarning.classList.add('d-none');
+                    document.getElementById('submitBtn').disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error checking conflicts:', error);
+            });
+    }
+    
+    // Add event listeners
+    [teacherSelect, daySelect, startTimeInput, endTimeInput].forEach(element => {
+        element.addEventListener('change', checkConflicts);
+    });
+    
+    // Load subjects for selected teacher
+    teacherSelect.addEventListener('change', function() {
+        const teacherId = this.value;
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+        
+        if (teacherId) {
+            const url = `{% url 'faculty:get_teacher_subjects' %}?teacher_id=${teacherId}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.id;
+                        option.textContent = `${subject.code} - ${subject.name} (${subject.program__name})`;
+                        subjectSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading subjects:', error);
+                });
+        }
+    });
+});
+</script>
+{% endblock %}

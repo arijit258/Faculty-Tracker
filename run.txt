@@ -1,0 +1,7 @@
+python manage.py create_dummy_data --num-teachers 20 --num-courses 25 --num-sessions 100
+
+# Clear existing data and create fresh
+python manage.py create_dummy_data --clear
+
+# Combined options
+python manage.py create_dummy_data --num-teachers 30 --num-courses 30 --num-sessions 150 --clear

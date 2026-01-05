@@ -1,0 +1,61 @@
+==================================================
+FACULTY TRACKER - TEACHER PROFILE REPORT
+==================================================
+
+PERSONAL INFORMATION
+Full Name,Emily Brown
+Employee ID,FAC0004
+Email,emily.brown3@easy2learning.com
+Phone,+91 9876545365
+Address,"42 Academic Way, Kolkata"
+Date of Birth,1982-08-16
+Gender,Female
+
+PROFESSIONAL INFORMATION
+Department,Basic Sciences
+Qualification,M.Sc Computer Science
+Specialization,Web Development
+Experience (Years),5
+Hourly Rate,1005.47
+Status,Active
+Hire Date,2022-03-02
+
+EMERGENCY CONTACT
+Contact Name,Emily Family
+Contact Phone,+91 9876584809
+
+ASSIGNED SUBJECTS
+Subject Code,Subject Name,Program,Type,Semester
+CS101,Introduction to Programming,B.Tech,Both,1st Semester
+MA101,Mathematics-I,B.Tech,Theory,1st Semester
+CS201,Algorithms,B.Tech,Theory,2nd Semester
+MA201,Mathematics-II,B.Tech,Theory,2nd Semester
+CS304,Software Engineering,B.Tech,Both,3rd Semester
+CS403,Cyber Security,B.Tech,Theory,4th Semester
+
+CLASS SUMMARY
+Period,All Time to Present
+Total Classes Conducted,10
+Total Teaching Hours,13.0
+
+DETAILED CLASSES
+Day,Date,Time,Subject,Program,Room,Duration (hrs),Status,Notes
+Friday,2026-01-14,14:00:00 - 15:00:00,Introduction to Programming,B.Tech,Room 102,1.00,Scheduled,Class for Introduction to Programming
+Monday,2026-01-16,08:00:00 - 09:00:00,Cyber Security,B.Tech,Lab CS-1,1.00,Scheduled,Class for Cyber Security
+Monday,2026-01-18,09:00:00 - 10:00:00,Algorithms,B.Tech,Auditorium,1.00,Completed,Class for Algorithms
+Monday,2026-01-15,11:00:00 - 12:00:00,Introduction to Programming,B.Tech,Room 102,1.00,Scheduled,Class for Introduction to Programming
+Monday,2026-01-13,14:00:00 - 16:00:00,Cyber Security,B.Tech,Room 102,2.00,Completed,Class for Cyber Security
+Saturday,2026-01-14,11:00:00 - 12:00:00,Introduction to Programming,B.Tech,Auditorium,1.00,Scheduled,Class for Introduction to Programming
+Saturday,2026-01-16,14:00:00 - 16:00:00,Cyber Security,B.Tech,Lab CS-1,2.00,Completed,Class for Cyber Security
+Tuesday,2026-01-11,16:00:00 - 17:00:00,Introduction to Programming,B.Tech,Lab CS-2,1.00,Scheduled,Class for Introduction to Programming
+Wednesday,2026-01-14,08:00:00 - 09:00:00,Software Engineering,B.Tech,Room 102,1.00,Scheduled,Class for Software Engineering
+Wednesday,2026-01-12,09:00:00 - 11:00:00,Mathematics-II,B.Tech,Lab CS-1,2.00,Completed,Class for Mathematics-II
+
+ATTENDANCE RECORDS
+Date,Subject,Status,Check In,Check Out,Notes
+No attendance records
+
+==================================================
+Report Generated: 2026-01-05 11:47:19
+Faculty Tracker System
+==================================================

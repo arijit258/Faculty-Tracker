@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Departments - Faculty Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Departments</h1>
+        <p>Manage organizational departments</p>
+    </div>
+    <a href="{% url 'faculty:department_add' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add Department
+    </a>
+</div>
+
+<!-- Departments Grid -->
+<div class="row g-4">
+    {% for dept in departments %}
+    <div class="col-md-6 col-lg-4">
+        <div class="content-card department-card animate-fadeInUp" style="animation-delay: {{ forloop.counter0|add:1 }}00ms;">
+            <div class="content-card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="dept-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <a href="{% url 'faculty:department_edit' dept.pk %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ dept.pk }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <h5 class="mb-1">{{ dept.name }}</h5>
+                <p class="text-muted small mb-3">{{ dept.description|default:"No description" }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-primary">
+                        <i class="fas fa-users me-1"></i>
+                        {{ dept.teacher_count }} Teachers
+                    </span>
+                    <small class="text-muted">{{ dept.created_at|date:"M d, Y" }}</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal{{ dept.pk }}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Department</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete <strong>{{ dept.name }}</strong>?</p>
+                        {% if dept.teacher_count > 0 %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            This department has {{ dept.teacher_count }} teachers assigned to it.
+                        </div>
+                        {% endif %}
+                        <p class="text-muted small mb-0">This action cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="{% url 'faculty:department_delete' dept.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="empty-state content-card">
+            <i class="fas fa-building"></i>
+            <h5>No Departments</h5>
+            <p>Get started by adding your first department.</p>
+            <a href="{% url 'faculty:department_add' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Department
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .department-card {
+        transition: all 0.3s ease;
+    }
+    
+    .department-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dept-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary-color), #818cf8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+    }
+</style>
+{% endblock %}

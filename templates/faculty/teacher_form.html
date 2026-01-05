@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if object %}Edit Teacher{% else %}Add Teacher{% endif %} - Faculty Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h1>{% if object %}Edit Teacher{% else %}Add New Teacher{% endif %}</h1>
+    <p>{% if object %}Update teacher information{% else %}Enter the new teacher's details{% endif %}</p>
+</div>
+
+<!-- Form Card -->
+<div class="content-card animate-fadeInUp">
+    <div class="content-card-header">
+        <h5><i class="fas fa-user-tie me-2 text-primary"></i>Teacher Information</h5>
+    </div>
+    <div class="content-card-body">
+        <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <div class="row g-4">
+                <!-- Personal Information Section -->
+                <div class="col-12">
+                    <h6 class="text-muted mb-3">
+                        <i class="fas fa-id-card me-2"></i>Personal Information
+                    </h6>
+                </div>
+                
+                <div class="col-md-6">
+                    {{ form.first_name|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.last_name|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.email|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.phone|as_crispy_field }}
+                </div>
+                <div class="col-12">
+                    {{ form.address|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.date_of_birth|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.gender|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.photo|as_crispy_field }}
+                </div>
+                
+                <!-- Professional Information Section -->
+                <div class="col-12 mt-4">
+                    <h6 class="text-muted mb-3">
+                        <i class="fas fa-briefcase me-2"></i>Professional Information
+                    </h6>
+                </div>
+                
+                <div class="col-md-4">
+                    {{ form.employee_id|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.department|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.status|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.qualification|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.specialization|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.experience_years|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.hourly_rate|as_crispy_field }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.hire_date|as_crispy_field }}
+                </div>
+                
+                <!-- Emergency Contact Section -->
+                <div class="col-12 mt-4">
+                    <h6 class="text-muted mb-3">
+                        <i class="fas fa-phone-alt me-2"></i>Emergency Contact
+                    </h6>
+                </div>
+                
+                <div class="col-md-6">
+                    {{ form.emergency_contact_name|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.emergency_contact_phone|as_crispy_field }}
+                </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <a href="{% url 'faculty:teacher_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>{% if object %}Update{% else %}Save{% endif %} Teacher
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function() {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+
+// Image preview
+document.getElementById('id_photo').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var preview = document.querySelector('.photo-preview') || createPreview();
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function createPreview() {
+    var container = document.querySelector('.col-md-4:last-child .mb-3');
+    var img = document.createElement('img');
+    img.className = 'photo-preview rounded mt-2';
+    img.style.maxWidth = '200px';
+    img.style.objectFit = 'cover';
+    container.appendChild(img);
+    return img;
+}
+</script>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 12px 15px;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+    
+    .text-muted {
+        color: #6b7280 !important;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .form-text {
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+    
+    .invalid-feedback {
+        font-size: 0.8rem;
+    }
+</style>
+{% endblock %}

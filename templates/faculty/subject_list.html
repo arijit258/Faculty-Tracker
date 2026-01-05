@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Subjects - Faculty Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1>Subjects</h1>
+        <p>Manage subjects offered under each program</p>
+    </div>
+    <a href="{% url 'faculty:subject_add' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Add Subject
+    </a>
+</div>
+
+<!-- Filters Card -->
+<div class="content-card animate-fadeInUp">
+    <div class="content-card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Search by name or code..." value="{{ request.GET.search|default:'' }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Program</label>
+                <select name="program" class="form-select">
+                    <option value="">All Programs</option>
+                    {% for program in programs %}
+                    <option value="{{ program.id }}" {% if request.GET.program == program.id|stringformat:"s" %}selected{% endif %}>{{ program.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Subject Type</label>
+                <select name="type" class="form-select">
+                    <option value="">All Types</option>
+                    <option value="theory" {% if request.GET.type == 'theory' %}selected{% endif %}>Theory</option>
+                    <option value="practical" {% if request.GET.type == 'practical' %}selected{% endif %}>Practical</option>
+                    <option value="both" {% if request.GET.type == 'both' %}selected{% endif %}>Both</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search me-2"></i>Filter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Subjects Table -->
+<div class="content-card animate-fadeInUp" style="animation-delay: 0.1s;">
+    <div class="content-card-body p-0">
+        {% if subjects %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Program</th>
+                        <th>Type</th>
+                        <th>Credits</th>
+                        <th>Hours</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <td>
+                            <span class="badge bg-primary">{{ subject.code }}</span>
+                        </td>
+                        <td>
+                            <div>
+                                <strong>{{ subject.name }}</strong>
+                                {% if subject.description %}
+                                <p class="mb-0 text-muted small text-truncate" style="max-width: 200px;">{{ subject.description }}</p>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ subject.program.name }}</span>
+                        </td>
+                        <td>
+                            {% if subject.subject_type == 'theory' %}
+                            <span class="badge bg-info">Theory</span>
+                            {% elif subject.subject_type == 'practical' %}
+                            <span class="badge bg-success">Practical</span>
+                            {% else %}
+                            <span class="badge bg-warning">Both</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ subject.credits }}</td>
+                        <td>{{ subject.total_hours }} hrs</td>
+                        <td>
+                            {% if subject.is_active %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{% url 'faculty:subject_edit' subject.pk %}" class="btn btn-outline-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ subject.pk }}" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="p-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-book"></i>
+            <h5>No Subjects Found</h5>
+            <p>{% if request.GET.search %}No subjects match your search criteria.{% else %}Get started by adding your first subject.{% endif %}</p>
+            <a href="{% url 'faculty:subject_add' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Subject
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Modals - Placed outside the table for proper rendering -->
+{% for subject in subjects %}
+<div class="modal fade" id="deleteModal{{ subject.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ subject.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ subject.pk }}">Delete Subject</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong>{{ subject.code }} - {{ subject.name }}</strong>?</p>
+                <p class="text-muted small mb-0">This action cannot be undone. All associated sessions will also be deleted.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{% url 'faculty:subject_delete' subject.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

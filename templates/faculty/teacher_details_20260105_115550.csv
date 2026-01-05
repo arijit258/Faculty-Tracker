@@ -1,0 +1,66 @@
+Teacher Name,Employee ID,Email,Department,Qualification,Subject,Program,Day,Time,Room,Duration (hrs),Status,Session Date
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Introduction to Programming,B.Tech,Friday,14:00:00 - 15:00:00,Room 102,1.00,Scheduled,2026-01-14
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Cyber Security,B.Tech,Monday,08:00:00 - 09:00:00,Lab CS-1,1.00,Scheduled,2026-01-16
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Algorithms,B.Tech,Monday,09:00:00 - 10:00:00,Auditorium,1.00,Completed,2026-01-18
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Introduction to Programming,B.Tech,Monday,11:00:00 - 12:00:00,Room 102,1.00,Scheduled,2026-01-15
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Cyber Security,B.Tech,Monday,14:00:00 - 16:00:00,Room 102,2.00,Completed,2026-01-13
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Introduction to Programming,B.Tech,Saturday,11:00:00 - 12:00:00,Auditorium,1.00,Scheduled,2026-01-14
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Cyber Security,B.Tech,Saturday,14:00:00 - 16:00:00,Lab CS-1,2.00,Completed,2026-01-16
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Introduction to Programming,B.Tech,Tuesday,16:00:00 - 17:00:00,Lab CS-2,1.00,Scheduled,2026-01-11
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Software Engineering,B.Tech,Wednesday,08:00:00 - 09:00:00,Room 102,1.00,Scheduled,2026-01-14
+Emily Brown (FAC0004),FAC0004,emily.brown3@easy2learning.com,Basic Sciences,M.Sc Computer Science,Mathematics-II,B.Tech,Wednesday,09:00:00 - 11:00:00,Lab CS-1,2.00,Completed,2026-01-12
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Physics-I,B.Tech,Friday,15:00:00 - 16:00:00,Room 201,1.00,Completed,2026-01-12
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Introduction to Programming,B.Tech,Monday,10:00:00 - 11:00:00,Room 202,1.00,Completed,2026-01-14
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Artificial Intelligence,B.Tech,Monday,14:00:00 - 15:00:00,Room 202,1.00,Scheduled,2026-01-20
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Physics-I,B.Tech,Saturday,14:00:00 - 15:00:00,Room 102,1.00,Scheduled,2026-01-11
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Machine Learning,B.Tech,Thursday,09:00:00 - 11:00:00,Lab CS-2,2.00,Scheduled,2026-01-16
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Mathematics-I,B.Tech,Thursday,16:00:00 - 17:00:00,Room 201,1.00,Scheduled,2026-01-12
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Introduction to Programming,B.Tech,Tuesday,08:00:00 - 09:00:00,Room 101,1.00,Completed,2026-01-11
+Jessica Davis (FAC0006),FAC0006,jessica.davis5@easy2learning.com,Electronics & Communication,M.Tech Computer Science,Artificial Intelligence,B.Tech,Tuesday,14:00:00 - 15:00:00,Lab CS-1,1.00,Completed,2026-01-08
+Sarah Johnson (FAC0002),FAC0002,sarah.johnson1@easy2learning.com,Electrical Engineering,M.Tech Computer Science,Data Structures,B.Tech,Friday,11:00:00 - 12:00:00,Room 201,1.00,Completed,2026-01-13
+Sarah Johnson (FAC0002),FAC0002,sarah.johnson1@easy2learning.com,Electrical Engineering,M.Tech Computer Science,Data Structures,B.Tech,Friday,14:00:00 - 16:00:00,Room 102,2.00,Scheduled,2026-01-12
+Sarah Johnson (FAC0002),FAC0002,sarah.johnson1@easy2learning.com,Electrical Engineering,M.Tech Computer Science,Data Structures,B.Tech,Saturday,08:00:00 - 09:00:00,Auditorium,1.00,Scheduled,2026-01-13
+Sarah Johnson (FAC0002),FAC0002,sarah.johnson1@easy2learning.com,Electrical Engineering,M.Tech Computer Science,Operating Systems,B.Tech,Wednesday,11:00:00 - 12:00:00,Lab CS-1,1.00,Scheduled,2026-01-07
+David Jones (FAC0005),FAC0005,david.jones4@easy2learning.com,Computer Science & Engineering,B.Tech Computer Science,Artificial Intelligence,B.Tech,Monday,08:00:00 - 09:00:00,Room 102,1.00,Scheduled,2026-01-19
+David Jones (FAC0005),FAC0005,david.jones4@easy2learning.com,Computer Science & Engineering,B.Tech Computer Science,Cloud Computing,B.Tech,Monday,09:00:00 - 10:00:00,Lab CS-2,1.00,Completed,2026-01-18
+David Jones (FAC0005),FAC0005,david.jones4@easy2learning.com,Computer Science & Engineering,B.Tech Computer Science,Database Systems,B.Tech,Monday,14:00:00 - 16:00:00,Auditorium,2.00,Scheduled,2026-01-12
+David Jones (FAC0005),FAC0005,david.jones4@easy2learning.com,Computer Science & Engineering,B.Tech Computer Science,Operating Systems,B.Tech,Saturday,09:00:00 - 11:00:00,Room 202,2.00,Completed,2026-01-13
+David Jones (FAC0005),FAC0005,david.jones4@easy2learning.com,Computer Science & Engineering,B.Tech Computer Science,Operating Systems,B.Tech,Thursday,08:00:00 - 09:00:00,Lab CS-2,1.00,Completed,2026-01-14
+David Jones (FAC0005),FAC0005,david.jones4@easy2learning.com,Computer Science & Engineering,B.Tech Computer Science,Database Systems,B.Tech,Tuesday,11:00:00 - 12:00:00,Room 102,1.00,Completed,2026-01-09
+Robert Miller (FAC0007),FAC0007,robert.miller6@easy2learning.com,Electrical Engineering,Ph.D. Computer Science,Software Engineering,B.Tech,Monday,08:00:00 - 09:00:00,Room 102,1.00,Scheduled,2026-01-19
+Robert Miller (FAC0007),FAC0007,robert.miller6@easy2learning.com,Electrical Engineering,Ph.D. Computer Science,Cloud Computing,B.Tech,Monday,11:00:00 - 12:00:00,Room 102,1.00,Scheduled,2026-01-12
+Robert Miller (FAC0007),FAC0007,robert.miller6@easy2learning.com,Electrical Engineering,Ph.D. Computer Science,Introduction to Programming,B.Tech,Saturday,14:00:00 - 16:00:00,Lab CS-2,2.00,Completed,2026-01-12
+Robert Miller (FAC0007),FAC0007,robert.miller6@easy2learning.com,Electrical Engineering,Ph.D. Computer Science,Mathematics-II,B.Tech,Wednesday,14:00:00 - 15:00:00,Room 101,1.00,Completed,2026-01-09
+Robert Miller (FAC0007),FAC0007,robert.miller6@easy2learning.com,Electrical Engineering,Ph.D. Computer Science,Mathematics-II,B.Tech,Wednesday,16:00:00 - 17:00:00,Room 201,1.00,Completed,2026-01-09
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Web Development,B.Tech,Friday,14:00:00 - 16:00:00,Room 101,2.00,Scheduled,2026-01-11
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Web Development,B.Tech,Friday,16:00:00 - 17:00:00,Lab CS-1,1.00,Scheduled,2026-01-11
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Cloud Computing,B.Tech,Monday,10:00:00 - 11:00:00,Room 202,1.00,Completed,2026-01-17
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Physics-II,B.Tech,Monday,16:00:00 - 17:00:00,Auditorium,1.00,Scheduled,2026-01-16
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Physics-II,B.Tech,Saturday,11:00:00 - 12:00:00,Lab CS-2,1.00,Completed,2026-01-16
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Operating Systems,B.Tech,Saturday,14:00:00 - 15:00:00,Room 201,1.00,Completed,2026-01-12
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Web Development,B.Tech,Tuesday,09:00:00 - 10:00:00,Room 202,1.00,Scheduled,2026-01-12
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Operating Systems,B.Tech,Tuesday,09:00:00 - 11:00:00,Lab CS-2,2.00,Scheduled,2026-01-11
+James Moore (FAC0009),FAC0009,james.moore8@easy2learning.com,Computer Science & Engineering,M.Tech Cyber Security,Web Development,B.Tech,Wednesday,08:00:00 - 09:00:00,Lab CS-1,1.00,Scheduled,2026-01-12
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Machine Learning,B.Tech,Friday,11:00:00 - 12:00:00,Room 101,1.00,Scheduled,2026-01-14
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Physics-II,B.Tech,Saturday,15:00:00 - 16:00:00,Room 102,1.00,Scheduled,2026-01-16
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Physics-II,B.Tech,Thursday,14:00:00 - 15:00:00,Lab CS-1,1.00,Scheduled,2026-01-16
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Machine Learning,B.Tech,Tuesday,14:00:00 - 15:00:00,Room 201,1.00,Completed,2026-01-06
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Physics-II,B.Tech,Tuesday,16:00:00 - 17:00:00,Room 101,1.00,Completed,2026-01-11
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Machine Learning,B.Tech,Wednesday,09:00:00 - 10:00:00,Room 102,1.00,Completed,2026-01-11
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Mathematics-I,B.Tech,Wednesday,10:00:00 - 11:00:00,Auditorium,1.00,Scheduled,2026-01-11
+John Smith (FAC0001),FAC0001,john.smith0@easy2learning.com,Basic Sciences,Ph.D. Computer Science,Physics-II,B.Tech,Wednesday,14:00:00 - 16:00:00,Room 201,2.00,Completed,2026-01-13
+Ashley Taylor (FAC0010),FAC0010,ashley.taylor9@easy2learning.com,N/A,Ph.D. Computer Science,Software Engineering,B.Tech,Monday,09:00:00 - 11:00:00,Room 202,2.00,Completed,2026-01-14
+Ashley Taylor (FAC0010),FAC0010,ashley.taylor9@easy2learning.com,N/A,Ph.D. Computer Science,Software Engineering,B.Tech,Thursday,10:00:00 - 11:00:00,Auditorium,1.00,Completed,2026-01-11
+Ashley Taylor (FAC0010),FAC0010,ashley.taylor9@easy2learning.com,N/A,Ph.D. Computer Science,Software Engineering,B.Tech,Thursday,11:00:00 - 12:00:00,Room 202,1.00,Completed,2026-01-10
+Ashley Taylor (FAC0010),FAC0010,ashley.taylor9@easy2learning.com,N/A,Ph.D. Computer Science,Software Engineering,B.Tech,Thursday,16:00:00 - 17:00:00,Room 201,1.00,Completed,2026-01-11
+Ashley Taylor (FAC0010),FAC0010,ashley.taylor9@easy2learning.com,N/A,Ph.D. Computer Science,Software Engineering,B.Tech,Tuesday,10:00:00 - 11:00:00,Auditorium,1.00,Scheduled,2026-01-06
+Ashley Taylor (FAC0010),FAC0010,ashley.taylor9@easy2learning.com,N/A,Ph.D. Computer Science,Software Engineering,B.Tech,Wednesday,09:00:00 - 11:00:00,Room 201,2.00,Completed,2026-01-08
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Cloud Computing,B.Tech,Friday,08:00:00 - 09:00:00,Room 101,1.00,Scheduled,2026-01-15
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Database Systems,B.Tech,Friday,09:00:00 - 11:00:00,Auditorium,2.00,Scheduled,2026-01-15
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Mathematics-I,B.Tech,Saturday,08:00:00 - 09:00:00,Lab CS-1,1.00,Scheduled,2026-01-10
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Cloud Computing,B.Tech,Saturday,10:00:00 - 11:00:00,Lab CS-1,1.00,Scheduled,2026-01-17
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Mathematics-I,B.Tech,Thursday,08:00:00 - 09:00:00,Auditorium,1.00,Completed,2026-01-16
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Database Systems,B.Tech,Thursday,16:00:00 - 17:00:00,Room 201,1.00,Scheduled,2026-01-16
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Cloud Computing,B.Tech,Tuesday,08:00:00 - 09:00:00,Room 101,1.00,Completed,2026-01-10
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Cloud Computing,B.Tech,Wednesday,15:00:00 - 16:00:00,Lab CS-2,1.00,Completed,2026-01-13
+Michael Williams (FAC0003),FAC0003,michael.williams2@easy2learning.com,Computer Science & Engineering,Ph.D. AI,Algorithms,B.Tech,Wednesday,16:00:00 - 17:00:00,Auditorium,1.00,Completed,2026-01-14
