@@ -27,7 +27,12 @@ The **Faculty Tracker System** is a robust web platform designed to streamline t
 This application is specifically tailored for educational institutions like the Easy2Learning Institute, providing a complete solution for faculty management, class scheduling, attendance tracking, and performance analytics. The system is designed to be scalable and can be customized to fit the specific needs of various educational organizations.
 
 ---
+## Screenshots
 
+The following screenshots demonstrate the key features and interface of the Faculty Tracker System. These images help new users understand the layout and functionality before setting up the application.
+![Admin Panel - Departments](Screenshot 2026-01-05 164516.png)
+![Admin Panel - Teachers](Screenshot 2026-01-05 164503.png)
+---
 ## Key Features
 
 ### Academic Management
@@ -358,9 +363,7 @@ python manage.py create_teacher_sessions
 
 ---
 
-## Screenshots
 
-The following screenshots demonstrate the key features and interface of the Faculty Tracker System. These images help new users understand the layout and functionality before setting up the application.
 
 ### Dashboard View
 
