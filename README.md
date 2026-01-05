@@ -30,7 +30,7 @@ This application is specifically tailored for educational institutions like the 
 ## Screenshots
 
 The following screenshots demonstrate the key features and interface of the Faculty Tracker System. These images help new users understand the layout and functionality before setting up the application.
-![Admin Panel - Departments](Screenshot 2026-01-05 164516.png)
+![Admin Panel - Departments](Screenshot%202026-01-05%20164516.png)
 ![Admin Panel - Teachers](Screenshot 2026-01-05 164503.png)
 ---
 ## Key Features
