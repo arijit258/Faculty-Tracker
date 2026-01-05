@@ -5,6 +5,7 @@ A comprehensive Django-based web application for managing academic faculty, sche
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Screenshots](#screenshots)
 - [Key Features](#key-features)
 - [Technology Stack](#technology-stack)
 - [Installation and Setup](#installation-and-setup)
@@ -13,7 +14,6 @@ A comprehensive Django-based web application for managing academic faculty, sche
 - [Usage Guide](#usage-guide)
 - [API Endpoints](#api-endpoints)
 - [Management Commands](#management-commands)
-- [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
 - [GitHub Upload Guide](#github-upload-guide)
